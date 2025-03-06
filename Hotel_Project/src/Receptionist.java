@@ -1,9 +1,11 @@
-public class Receptionist {
+public class Receptionist extends Thread {
+    Hotel hotel;
     public Receptionist(){
-        System.out.println("Receptionist init");
     }
 
     public void run(){
-        System.out.println("Receptionist run");
+//        while(hotel.guests.isEmpty() == false){
+//
+//        }
     }
 }

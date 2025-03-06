@@ -1,9 +1,8 @@
-public class RoomCleaner {
+public class RoomCleaner extends Thread{
     public RoomCleaner(){
-        System.out.println("RoomCleaner init");
+
     }
 
     public void run(){
-        System.out.println("RoomCleaner run");
     }
 }
