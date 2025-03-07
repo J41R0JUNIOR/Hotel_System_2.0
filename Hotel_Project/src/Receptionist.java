@@ -1,5 +1,3 @@
-import java.lang.reflect.Member;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Receptionist extends Thread {
@@ -16,7 +14,7 @@ public class Receptionist extends Thread {
     }
 
     public void run() {
-        System.out.println("Receptionist " + this.id + " started");
+//        System.out.println("Receptionist " + this.id + " started");
         while(!this.hotel.groups.isEmpty()){
 //            this.hotel.lock.lock();
 //            this.hotel.lock.unlock();
@@ -67,10 +65,17 @@ public class Receptionist extends Thread {
                     break;
                 }
             }
-
         } else {
+            this.group.qtdTried ++;
+            this.group.groupDesirer = Desirer.NOT_ACCEPTED_GOING_OUT_TRY_AGAIN;
+            if (this.group.qtdTried <= 1){
+                this.hotel.groups.add(this.group);
+                System.out.println("group " + this.group.id + " is going out and try again later ");
+            } else {
+                System.out.println("Group " + this.group.id + " is going home");
+            }
 
-            this.hotel.groups.add(this.group);
+            this.group = null;
         }
 
 

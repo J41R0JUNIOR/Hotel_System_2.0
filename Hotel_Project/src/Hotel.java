@@ -24,6 +24,11 @@ public class Hotel {
 
     public void startAll(){
 
+        for (Group g : groups){
+            g.hotel = this;
+            g.start();
+        }
+
         for (Receptionist receptionist : receptionists) {
             receptionist.hotel = this;
             receptionist.start();
