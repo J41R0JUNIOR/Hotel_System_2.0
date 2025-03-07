@@ -21,7 +21,7 @@ public class Receptionist extends Thread {
 //            this.hotel.lock.unlock();
 
             findGroups();
-            
+
         }
     }
 
@@ -36,6 +36,12 @@ public class Receptionist extends Thread {
             System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
 
             allocateGroup();
+
+            try {
+                sleep(rand.nextInt(5000));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -51,7 +57,7 @@ public class Receptionist extends Thread {
                 }
             }
 
-            this.hotel.lock.lock();
+            this.hotel.lock.unlock();
         }
     }
 }
