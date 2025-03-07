@@ -38,7 +38,7 @@ public class Receptionist extends Thread {
             allocateGroup();
 
             try {
-                sleep(rand.nextInt(5000));
+                sleep(rand.nextInt(2000));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -46,18 +46,27 @@ public class Receptionist extends Thread {
     }
 
     public void allocateGroup() {
+        this.hotel.lock.lock();
+
         if (this.hotel.qtdFreeRooms > 0){
-            this.hotel.lock.lock();
+            this.hotel.qtdFreeRooms -= 1;
 
             for (Room room : this.hotel.rooms){
                 if (room.group != null) {
                     if (room.group.members.isEmpty()) {
 
+                        System.out.println("achou em");
                     }
                 }
             }
 
-            this.hotel.lock.unlock();
+
+        } else {
+            System.out.println("sem quartos baby");
+            this.hotel.groups.add(this.group);
         }
+        System.out.println("qtd disponiveis" + this.hotel.qtdFreeRooms);
+
+        this.hotel.lock.unlock();
     }
 }

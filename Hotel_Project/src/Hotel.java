@@ -17,7 +17,7 @@ public class Hotel {
         this.roomCleaners = roomCleaners;
         this.receptionists = receptionists;
         this.rooms = rooms;
-        this.qtdFreeRooms = rooms.size() + 1;
+        this.qtdFreeRooms = rooms.size();
 
         startAll();
     }
