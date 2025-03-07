@@ -1,3 +1,4 @@
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -52,20 +53,26 @@ public class Receptionist extends Thread {
             this.hotel.qtdFreeRooms -= 1;
 
             for (Room room : this.hotel.rooms){
-                if (room.group != null) {
-                    if (room.group.members.isEmpty()) {
+                if (room.group != null && room.group.members.isEmpty()) {
+                    room.group = this.group;
 
-                        System.out.println("achou em");
+                    System.out.println("group " + this.group.id + " allocated to room " + room.roomNumber);
+
+                    this.group = null;
+
+                    for (Guest guest : room.group.members){
+                        guest.insideRoom = true;
                     }
+
+                    break;
                 }
             }
 
-
         } else {
-            System.out.println("sem quartos baby");
+
             this.hotel.groups.add(this.group);
         }
-        System.out.println("qtd disponiveis" + this.hotel.qtdFreeRooms);
+
 
         this.hotel.lock.unlock();
     }

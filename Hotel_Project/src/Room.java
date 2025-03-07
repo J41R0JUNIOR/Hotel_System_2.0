@@ -6,7 +6,7 @@ public class Room {
     public boolean isClean;
 
     public Room() {
-        this.group = null;
+        this.group = new Group();
         this.isClean = false;
     }
 }
