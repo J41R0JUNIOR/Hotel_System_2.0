@@ -2,9 +2,11 @@ import java.util.ArrayList;
 
 public class Room {
     public int roomNumber;
-    public ArrayList<Guest> guests;
+    public Group group;
     public boolean isClean;
 
-
-
+    public Room() {
+        this.group = null;
+        this.isClean = false;
+    }
 }

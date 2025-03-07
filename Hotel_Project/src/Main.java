@@ -7,7 +7,6 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) throws NoSuchMethodException {
 
-//      Room
         ArrayList<Room> rooms = generateObject(10, Room.class);
 
 //      Threads
@@ -60,7 +59,6 @@ public class Main {
         ArrayList<Guest> guests = generateObject(50, Guest.class);
 
         for (Guest g : guests) {
-
            for (Group gp : groups) {
                if (g.familyId == gp.id) {
                    gp.members.add(g);
@@ -70,21 +68,26 @@ public class Main {
 
         groups.removeIf(gp -> gp.members.isEmpty());
 
+        ArrayList<Group> newGroups = new ArrayList<>();
+        int newGroupId = groups.size();
+
         for (Group g : groups) {
-
             System.out.println("Group: " + g.id);
-            System.out.println(g.members.size());
+            System.out.println("Members: " + g.members.size());
 
-            if (g.members.size() > 4){
-                float multiplier = (float) (g.members.size() / 4.0);
-                int qtdNewGroups = (g.members.size() / 4);
-                
-                System.out.println("qtd new groups needed " + qtdNewGroups);
+            while (g.members.size() > 4) {
+                Group newGroup = new Group();
+                newGroup.id = newGroupId++;
+
+                for (int i = 0; i < 4 && !g.members.isEmpty(); i++) {
+                    newGroup.members.add(g.members.remove(0));
+                }
+
+                newGroups.add(newGroup);
             }
-
-            System.out.println("\n");
-
         }
+        groups.addAll(newGroups);
+
         return groups;
     }
 }

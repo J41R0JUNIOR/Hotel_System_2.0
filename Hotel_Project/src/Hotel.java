@@ -7,7 +7,7 @@ public class Hotel {
     public ArrayList<RoomCleaner> roomCleaners;
     public ArrayList<Receptionist> receptionists;
     public ArrayList<Room> rooms;
-    public ArrayList<Guest> guestsStrolling;
+    public int qtdFreeRooms;
 
     public Lock lock = new ReentrantLock();
 
@@ -16,9 +16,8 @@ public class Hotel {
 
         this.roomCleaners = roomCleaners;
         this.receptionists = receptionists;
-        this.guestsStrolling = new ArrayList<>();
         this.rooms = rooms;
-
+        this.qtdFreeRooms = rooms.size() + 1;
 
         startAll();
     }
