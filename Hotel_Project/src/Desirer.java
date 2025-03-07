@@ -1,7 +1,7 @@
 
 public enum Desirer {
     CHECK_OUT,
-//    CHECK_IN,
+    CHECK_IN,
     GET_OUT,
     NOTHING;
 }

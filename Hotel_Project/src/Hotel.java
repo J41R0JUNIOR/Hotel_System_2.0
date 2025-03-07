@@ -3,36 +3,27 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Hotel {
-    ArrayList<Guest> guests;
-    ArrayList<Guest> guestsWantingSomething;
-    ArrayList<RoomCleaner> roomCleaners;
-    ArrayList<Receptionist> receptionists;
-
-    ArrayList<Room> freeRooms;
-    ArrayList<Room> fullRooms;
-    ArrayList<Room> momentFreeRooms;
+    public ArrayList<Group> groups;
+    public ArrayList<RoomCleaner> roomCleaners;
+    public ArrayList<Receptionist> receptionists;
+    public ArrayList<Room> rooms;
+    public ArrayList<Guest> guestsStrolling;
 
     public Lock lock = new ReentrantLock();
 
-    public Hotel(ArrayList<Guest> guests, ArrayList<RoomCleaner> roomCleaners, ArrayList<Receptionist> receptionists, ArrayList<Room> rooms) {
-        this.guests = guests;
-        this.guestsWantingSomething = guests;
+    public Hotel(ArrayList<Group> groups, ArrayList<RoomCleaner> roomCleaners, ArrayList<Receptionist> receptionists, ArrayList<Room> rooms) {
+        this.groups = groups;
 
         this.roomCleaners = roomCleaners;
         this.receptionists = receptionists;
+        this.guestsStrolling = new ArrayList<>();
+        this.rooms = rooms;
 
-        this.freeRooms = rooms;
-        this.fullRooms = new ArrayList<>();
-
-        this.momentFreeRooms = new ArrayList<>();
 
         startAll();
     }
 
     public void startAll(){
-//        for (Guest guest : guests) {
-//            guest.start();
-//        }
 
         for (Receptionist receptionist : receptionists) {
             receptionist.hotel = this;
