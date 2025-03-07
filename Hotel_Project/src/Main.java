@@ -72,8 +72,6 @@ public class Main {
         int newGroupId = groups.size();
 
         for (Group g : groups) {
-            System.out.println("Group: " + g.id);
-            System.out.println("Members: " + g.members.size());
 
             while (g.members.size() > 4) {
                 Group newGroup = new Group();
@@ -86,6 +84,7 @@ public class Main {
                 newGroups.add(newGroup);
             }
         }
+
         groups.addAll(newGroups);
 
         return groups;

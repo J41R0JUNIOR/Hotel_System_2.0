@@ -25,21 +25,23 @@ public class Receptionist extends Thread {
     }
 
     public void findGroups() {
-        if (!hotel.groups.isEmpty()){
+        if (hotel.groups != null){
             this.hotel.lock.lock();
 
-            this.group = hotel.groups.remove(0);
+            this.group = this.hotel.groups.remove(0);
+
+            if (this.group != null){
+            System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
+                this.group.qtdTried ++;
 
             this.hotel.lock.unlock();
-
-            System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
-
-            allocateGroup();
-
             try {
-                sleep(rand.nextInt(2000));
+                sleep(rand.nextInt(1000));
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            }
+
+            allocateGroup();
             }
         }
     }
@@ -47,38 +49,39 @@ public class Receptionist extends Thread {
     public void allocateGroup() {
         this.hotel.lock.lock();
 
+
         if (this.hotel.qtdFreeRooms > 0){
-            this.hotel.qtdFreeRooms -= 1;
 
             for (Room room : this.hotel.rooms){
                 if (room.group != null && room.group.members.isEmpty()) {
                     room.group = this.group;
+                    this.group.groupDesirer = Desirer.ALLOCATED;
 
-                    System.out.println("group " + this.group.id + " allocated to room " + room.roomNumber);
+                    System.out.println("Receptionist " + this.id + "group " + this.group.id + " allocated to room " + room.roomNumber);
 
-                    this.group = null;
 
                     for (Guest guest : room.group.members){
                         guest.insideRoom = true;
                     }
 
+                    this.hotel.qtdFreeRooms -= 1;
                     break;
                 }
             }
         } else {
-            this.group.qtdTried ++;
-            this.group.groupDesirer = Desirer.NOT_ACCEPTED_GOING_OUT_TRY_AGAIN;
-            if (this.group.qtdTried <= 1){
-                this.hotel.groups.add(this.group);
-                System.out.println("group " + this.group.id + " is going out and try again later ");
-            } else {
-                System.out.println("Group " + this.group.id + " is going home");
+//            System.out.println("Receptionist " + this.id + " no room found for group " + this.group.id);
+
+            if (this.group.qtdTried == 1){
+                this.group.goOutWait();
             }
 
-            this.group = null;
+
         }
 
-
         this.hotel.lock.unlock();
+
+
+        this.group = null;
+
     }
 }

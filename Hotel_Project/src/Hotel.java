@@ -4,6 +4,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Hotel {
     public ArrayList<Group> groups;
+    public ArrayList<Group> groupsInWaitList;
+
     public ArrayList<RoomCleaner> roomCleaners;
     public ArrayList<Receptionist> receptionists;
     public ArrayList<Room> rooms;
@@ -13,7 +15,7 @@ public class Hotel {
 
     public Hotel(ArrayList<Group> groups, ArrayList<RoomCleaner> roomCleaners, ArrayList<Receptionist> receptionists, ArrayList<Room> rooms) {
         this.groups = groups;
-
+        this.groupsInWaitList = new ArrayList<>();
         this.roomCleaners = roomCleaners;
         this.receptionists = receptionists;
         this.rooms = rooms;
@@ -22,9 +24,8 @@ public class Hotel {
         startAll();
     }
 
-    public void startAll(){
-
-        for (Group g : groups){
+    public void startAll() {
+        for (Group g : groups) {
             g.hotel = this;
             g.start();
         }
@@ -36,6 +37,36 @@ public class Hotel {
 
         for (RoomCleaner roomCleaner : roomCleaners) {
             roomCleaner.start();
+        }
+    }
+
+    public void removeGroup(Group g) {
+        lock.lock();
+        try {
+            groups.remove(g);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+
+    public void addToWaitList(Group g) {
+        lock.lock();
+        try {
+            groupsInWaitList.add(g);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void returnFromWaitList(Group g) {
+        lock.lock();
+        try {
+            if (groupsInWaitList.remove(g)) {
+                groups.add(g);
+            }
+        } finally {
+            lock.unlock();
         }
     }
 }
