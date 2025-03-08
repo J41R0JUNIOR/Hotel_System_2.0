@@ -29,12 +29,14 @@ public class Receptionist extends Thread {
             this.hotel.lock.lock();
 
             this.group = this.hotel.groups.remove(0);
+            this.hotel.lock.unlock();
 
             if (this.group != null){
             System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
                 this.group.qtdTried ++;
 
-            this.hotel.lock.unlock();
+
+
             try {
                 sleep(rand.nextInt(1000));
             } catch (InterruptedException e) {
@@ -47,8 +49,7 @@ public class Receptionist extends Thread {
     }
 
     public void allocateGroup() {
-        this.hotel.lock.lock();
-
+//        this.hotel.lock.lock();
 
         if (this.hotel.qtdFreeRooms > 0){
 
@@ -74,11 +75,9 @@ public class Receptionist extends Thread {
             if (this.group.qtdTried == 1){
                 this.group.goOutWait();
             }
-
-
         }
 
-        this.hotel.lock.unlock();
+//        this.hotel.lock.unlock();
 
 
         this.group = null;
