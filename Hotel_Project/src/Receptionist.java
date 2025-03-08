@@ -26,24 +26,24 @@ public class Receptionist extends Thread {
 
     public void findGroups() {
         if (hotel.groups != null){
+
             this.hotel.lock.lock();
 
             this.group = this.hotel.groups.remove(0);
+
             this.hotel.lock.unlock();
 
             if (this.group != null){
-            System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
-                this.group.qtdTried ++;
+                System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
+                    this.group.qtdTried ++;
 
+                try {
+                    sleep(rand.nextInt(1000));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
-
-            try {
-                sleep(rand.nextInt(1000));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            allocateGroup();
+                allocateGroup();
             }
         }
     }
@@ -78,7 +78,6 @@ public class Receptionist extends Thread {
         }
 
 //        this.hotel.lock.unlock();
-
 
         this.group = null;
 
