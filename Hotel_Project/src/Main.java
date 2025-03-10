@@ -32,7 +32,7 @@ public class Main {
                 }
                 else if (newObj instanceof Guest) {
                     ((Guest) newObj).id = i;
-                    ((Guest) newObj).familyId = new Random().nextInt(qtd - 30);
+                    ((Guest) newObj).familyId = new Random().nextInt((int) (qtd - ( (float) qtd * 0.3)));
                 }
                 else if (newObj instanceof Room) {
                     ((Room) newObj).roomNumber = i;
@@ -54,10 +54,12 @@ public class Main {
         Group group = new Group();
         group.id = 0;
 
-        ArrayList<Group> groups = generateObject(50, Group.class);
+        int qtd = 20;
+
+        ArrayList<Group> groups = generateObject(qtd, Group.class);
         groups.add(group);
 
-        ArrayList<Guest> guests = generateObject(50, Guest.class);
+        ArrayList<Guest> guests = generateObject(qtd, Guest.class);
 
         for (Guest g : guests) {
            for (Group gp : groups) {

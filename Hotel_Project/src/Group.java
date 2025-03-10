@@ -70,6 +70,7 @@ public class Group extends Thread {
 
     public void goOutWait() {
         System.out.println("Group " + this.id + " is going out, is gonna try again later!\n");
+
         hotel.lock.lock();
 
         try {
@@ -79,12 +80,12 @@ public class Group extends Thread {
             hotel.lock.unlock();
         }
 
-        try {
-            sleep(5000);
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+//        try {
+//            sleep(5000);
+//
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//        }
 
         hotel.lock.lock();
 

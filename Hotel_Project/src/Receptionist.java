@@ -27,7 +27,9 @@ public class Receptionist extends Thread {
             this.group = this.hotel.groups.remove(0);
 
             System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
+
             this.group.qtdTried ++;
+            System.out.println("qtdTried" + this.group.qtdTried);
 
             allocateGroup();
 
@@ -65,6 +67,7 @@ public class Receptionist extends Thread {
 //            if (this.group.qtdTried == 2) {
 //                this.group.goHome();
 //            }
+            this.group = null;
         }
     }
 }
