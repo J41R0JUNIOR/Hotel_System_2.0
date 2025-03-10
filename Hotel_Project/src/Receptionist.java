@@ -29,26 +29,20 @@ public class Receptionist extends Thread {
     }
 
     public void findGroups() {
+        this.hotel.lock.lock();
 
-        if (this.hotel.groups != null && this.hotel.groups.size() > 1){
-            this.hotel.lock.lock();
-
-            try {
-//                this.group = this.hotel.groups.remove(0);
-                this.group = this.hotel.groups.get(0);
-                this.hotel.groups.remove(this.group);
-
+        try {
+            if (!this.hotel.groups.isEmpty()) {
+                this.group = this.hotel.groups.remove(0);
                 System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
-
                 this.group.qtdTried++;
-
                 allocateGroup();
-
-            } finally {
-                this.hotel.lock.unlock();
             }
+        } finally {
+            this.hotel.lock.unlock();
         }
     }
+
 
     public void allocateGroup() {
         if (this.hotel.qtdFreeRooms > 0){
