@@ -18,6 +18,8 @@ public class Receptionist extends Thread {
 
             findGroups();
 
+            this.group = null;
+
             try {
                 sleep(rand.nextInt(1000));
             } catch (InterruptedException e) {
@@ -28,7 +30,7 @@ public class Receptionist extends Thread {
 
     public void findGroups() {
 
-        if (this.hotel.groups != null && !this.hotel.groups.isEmpty()){
+        if (this.hotel.groups != null && this.hotel.groups.size() > 1){
             this.hotel.lock.lock();
 
             try {
@@ -70,7 +72,5 @@ public class Receptionist extends Thread {
                 this.group.goOutWait();
             }
         }
-
-        this.group = null;
     }
 }
