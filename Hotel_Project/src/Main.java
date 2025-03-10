@@ -10,7 +10,7 @@ public class Main {
         ArrayList<Room> rooms = generateObject(10, Room.class);
 
 //      Threads
-        ArrayList<Group> families = generateGroups();
+        ArrayList<Group> families = generateGroups(20);
 
         ArrayList<RoomCleaner> roomCleaners = generateObject(10, RoomCleaner.class);
         ArrayList<Receptionist> receptionists = generateObject(5, Receptionist.class);
@@ -50,16 +50,14 @@ public class Main {
         return objects;
     }
 
-    public static ArrayList<Group> generateGroups() throws NoSuchMethodException {
+    public static ArrayList<Group> generateGroups(int qtdGuests) throws NoSuchMethodException {
         Group group = new Group();
         group.id = 0;
 
-        int qtd = 20;
-
-        ArrayList<Group> groups = generateObject(qtd, Group.class);
+        ArrayList<Group> groups = generateObject(qtdGuests, Group.class);
         groups.add(group);
 
-        ArrayList<Guest> guests = generateObject(qtd, Guest.class);
+        ArrayList<Guest> guests = generateObject(qtdGuests, Guest.class);
 
         for (Guest g : guests) {
            for (Group gp : groups) {
