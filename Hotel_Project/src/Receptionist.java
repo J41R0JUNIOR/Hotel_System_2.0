@@ -34,32 +34,44 @@ public class Receptionist extends Thread {
         try {
             if (!this.hotel.groups.isEmpty()) {
                 this.group = this.hotel.groups.remove(0);
+
                 System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
+
                 this.group.qtdTried++;
-                allocateGroup();
+
             }
         } finally {
             this.hotel.lock.unlock();
         }
+
+        allocateGroup();
     }
 
-
     public void allocateGroup() {
-        if (this.hotel.qtdFreeRooms > 0){
-            for (Room room : this.hotel.rooms){
-                if (room.group != null && room.group.members.isEmpty()) {
+        this.hotel.lock.lock();
 
-                    room.group = this.group;
-                    this.group.groupDesirer = Desirer.ALLOCATED;
-                    this.group.room = room;
+        try {
+            if (this.hotel.qtdFreeRooms > 0) {
+                for (Room room : this.hotel.rooms) {
+                    if (room.group != null && room.group.members.isEmpty()) {
 
-                    System.out.println("Receptionist " + this.id + ", group " + this.group.id + " allocated to room " + room.roomNumber);
+                        room.group = this.group;
+                        this.group.groupDesirer = Desirer.ALLOCATED;
+                        this.group.room = room;
 
-                    this.hotel.qtdFreeRooms -= 1;
-                    break;
+                        System.out.println("Receptionist " + this.id + ", group " + this.group.id + " allocated to room " + room.roomNumber);
+
+                        this.hotel.qtdFreeRooms -= 1;
+                        break;
+                    }
                 }
             }
-        } else {
+        } finally {
+            this.hotel.lock.unlock();
+        }
+
+        if (this.hotel.qtdFreeRooms == 0 && this.group != null) {
+
             System.out.println("Receptionist " + this.id + " no room found for group " + this.group.id + "\n");
 
             if (this.group.qtdTried == 1){

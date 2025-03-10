@@ -47,12 +47,10 @@ public class Group extends Thread {
     }
 
     public void goOutWait() {
-
-        hotel.lock.lock();
-
-        System.out.println("Group " + this.id + " is going out, is gonna try again later!\n");
+        System.out.println("Group " + this.id + " is going out, will try again later!");
 
         try {
+            hotel.lock.lock();
             hotel.groups.remove(this);
             hotel.groupsInWaitList.add(this);
         } finally {
@@ -60,14 +58,15 @@ public class Group extends Thread {
         }
 
         try {
-            sleep(1000);
-
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            System.err.println("Thread interrupted while sleeping: " + e.getMessage());
+            return;
         }
 
-        hotel.lock.lock();
         try {
+            hotel.lock.lock();
             hotel.groupsInWaitList.remove(this);
             hotel.groups.add(this);
         } finally {
