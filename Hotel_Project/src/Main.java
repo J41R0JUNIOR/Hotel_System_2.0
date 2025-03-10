@@ -11,6 +11,7 @@ public class Main {
 
 //      Threads
         ArrayList<Group> families = generateGroups();
+
         ArrayList<RoomCleaner> roomCleaners = generateObject(10, RoomCleaner.class);
         ArrayList<Receptionist> receptionists = generateObject(5, Receptionist.class);
 

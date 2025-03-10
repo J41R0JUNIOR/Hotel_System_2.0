@@ -14,45 +14,36 @@ public class Receptionist extends Thread {
     }
 
     public void run() {
-//        System.out.println("Receptionist " + this.id + " started");
         while(!this.hotel.groups.isEmpty()){
-//            this.hotel.lock.lock();
-//            this.hotel.lock.unlock();
 
             findGroups();
-
         }
     }
 
     public void findGroups() {
         if (hotel.groups != null){
-
             this.hotel.lock.lock();
 
             this.group = this.hotel.groups.remove(0);
 
+            System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
+            this.group.qtdTried ++;
+
+            allocateGroup();
+
             this.hotel.lock.unlock();
 
-            if (this.group != null){
-                System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
-                    this.group.qtdTried ++;
-
-                try {
-                    sleep(rand.nextInt(1000));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                allocateGroup();
+            try {
+                sleep(rand.nextInt(1000));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     public void allocateGroup() {
-//        this.hotel.lock.lock();
 
         if (this.hotel.qtdFreeRooms > 0){
-
             for (Room room : this.hotel.rooms){
                 if (room.group != null && room.group.members.isEmpty()) {
                     room.group = this.group;
@@ -60,26 +51,20 @@ public class Receptionist extends Thread {
 
                     System.out.println("Receptionist " + this.id + "group " + this.group.id + " allocated to room " + room.roomNumber);
 
-
-                    for (Guest guest : room.group.members){
-                        guest.insideRoom = true;
-                    }
-
                     this.hotel.qtdFreeRooms -= 1;
-                    break;
+                    this.group = null;
+                    return;
                 }
             }
         } else {
-//            System.out.println("Receptionist " + this.id + " no room found for group " + this.group.id);
+            System.out.println("Receptionist " + this.id + " no room found for group " + this.group.id + "\n");
 
             if (this.group.qtdTried == 1){
                 this.group.goOutWait();
             }
+//            if (this.group.qtdTried == 2) {
+//                this.group.goHome();
+//            }
         }
-
-//        this.hotel.lock.unlock();
-
-        this.group = null;
-
     }
 }

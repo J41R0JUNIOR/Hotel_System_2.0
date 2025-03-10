@@ -7,45 +7,43 @@ public class Group extends Thread {
     public int qtdTried;
     public boolean allocated;
     public Hotel hotel;
-    private boolean run;
+    public boolean runLoop;
 
     public Group() {
         this.members = new ArrayList<>();
         this.groupDesirer = Desirer.CHECK_IN;
         this.qtdTried = 0;
-        this.run = true;
+        this.runLoop = true;
     }
 
     public void run() {
-        while (run) {
+        while (runLoop) {
+
             if (groupDesirer == Desirer.CHECK_IN) {
 
-                if (this.qtdTried >= 2) {
-                    System.out.println("Group " + this.id + " is going home after " + this.qtdTried + " tries.\n");
+//       /*         if (this.qtdTried > 1) {
+//                    goHome();
+//                }*/
+                if (this.qtdTried == 2){
+                    this.goHome();
+                }
 
+                if (this.qtdTried <= 1){
                     hotel.lock.lock();
                     try {
-                        hotel.groups.remove(this);
+                        if (!this.hotel.groups.contains(this)) {
+                            this.hotel.groups.add(this);
+                        }
                     } finally {
                         hotel.lock.unlock();
                     }
-
-                    run = false;
-                    break;
                 }
 
-                hotel.lock.lock();
-                try {
-                    if (!this.hotel.groups.contains(this)) {
-                        this.hotel.groups.add(this);
-                    }
-                } finally {
-                    hotel.lock.unlock();
-                }
             }
             //just to finalize for a while
             else {
-                run = false;
+                runLoop = false;
+//                this.interrupt();
             }
 
             try {
@@ -54,6 +52,20 @@ public class Group extends Thread {
                 Thread.currentThread().interrupt();
             }
         }
+    }
+
+    public void goHome() {
+        System.out.println("Group " + this.id + " is going home after " + this.qtdTried + " tries.\n");
+
+        hotel.lock.lock();
+        try {
+            hotel.groups.remove(this);
+        } finally {
+            hotel.lock.unlock();
+        }
+
+        runLoop = false;
+
     }
 
     public void goOutWait() {
