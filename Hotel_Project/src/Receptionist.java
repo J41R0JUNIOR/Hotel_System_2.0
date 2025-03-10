@@ -56,7 +56,7 @@ public class Receptionist extends Thread {
                     if (room.group != null && room.group.members.isEmpty()) {
 
                         room.group = this.group;
-                        this.group.groupDesirer = Desirer.ALLOCATED;
+//                        this.group.groupDesirer = Desirer.ALLOCATED;
                         this.group.room = room;
 
                         System.out.println("Receptionist " + this.id + ", group " + this.group.id + " allocated to room " + room.roomNumber);

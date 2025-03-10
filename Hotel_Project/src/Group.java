@@ -18,6 +18,9 @@ public class Group extends Thread {
     }
 
     public void run() {
+
+        startMembers();
+
         while (runLoop) {
 //            System.out.println("rodando em");
             if (groupDesirer == Desirer.CHECK_IN && room == null) {
@@ -26,10 +29,26 @@ public class Group extends Thread {
                 }
             }
             //just to finalize for a while
+
             else {
-                runLoop = false;
-                System.out.println("finalizando..." + this.id);
+                finalizeGroup();
             }
+        }
+    }
+
+    private void finalizeGroup() {
+        this.runLoop = false;
+        this.room = null;
+        this.groupDesirer = Desirer.FINALIZED;
+
+        System.out.println("finalizing..." + this.id + "\n");
+    }
+
+
+    private void startMembers(){
+        for (Guest g: this.members){
+            g.group = this;
+            g.start();
         }
     }
 
@@ -44,6 +63,8 @@ public class Group extends Thread {
         } finally {
             hotel.lock.unlock();
         }
+
+        finalizeGroup();
     }
 
     public void goOutWait() {
@@ -58,7 +79,7 @@ public class Group extends Thread {
         }
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Thread interrupted while sleeping: " + e.getMessage());
