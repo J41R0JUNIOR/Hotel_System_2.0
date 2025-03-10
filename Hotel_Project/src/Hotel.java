@@ -34,39 +34,6 @@ public class Hotel {
             receptionist.hotel = this;
             receptionist.start();
         }
-
-        for (RoomCleaner roomCleaner : roomCleaners) {
-            roomCleaner.start();
-        }
     }
 
-//    public void removeGroup(Group g) {
-//        lock.lock();
-//        try {
-//            groups.remove(g);
-//        } finally {
-//            lock.unlock();
-//        }
-//    }
-//
-//
-//    public void addToWaitList(Group g) {
-//        lock.lock();
-//        try {
-//            groupsInWaitList.add(g);
-//        } finally {
-//            lock.unlock();
-//        }
-//    }
-//
-//    public void returnFromWaitList(Group g) {
-//        lock.lock();
-//        try {
-//            if (groupsInWaitList.remove(g)) {
-//                groups.add(g);
-//            }
-//        } finally {
-//            lock.unlock();
-//        }
-//    }
 }

@@ -6,9 +6,8 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) throws NoSuchMethodException {
-
-        ArrayList<Room> rooms = generateObject(5, Room.class);
-        ArrayList<Group> families = generateGroups(20);
+        ArrayList<Room> rooms = generateObject(4, Room.class);
+        ArrayList<Group> families = generateGroups(15);
         ArrayList<RoomCleaner> roomCleaners = generateObject(10, RoomCleaner.class);
         ArrayList<Receptionist> receptionists = generateObject(5, Receptionist.class);
 
@@ -78,11 +77,9 @@ public class Main {
                 for (int i = 0; i < 4 && !g.members.isEmpty(); i++) {
                     newGroup.members.add(g.members.remove(0));
                 }
-
                 newGroups.add(newGroup);
             }
         }
-
         groups.addAll(newGroups);
 
         return groups;
