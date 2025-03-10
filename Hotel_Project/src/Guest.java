@@ -18,7 +18,7 @@ public class Guest extends Thread{
 //            System.out.println(this.group.room);
 
             int value = random.nextInt(2);
-            System.out.println(value);
+//            System.out.println(value);
 
 
         }
