@@ -35,7 +35,7 @@ public class Receptionist extends Thread {
             if (!this.hotel.groups.isEmpty()) {
                 this.group = this.hotel.groups.remove(0);
 
-                System.out.println("Receptionist " + this.id + " found a group " + this.group.id);
+                System.out.println("\nReceptionist " + this.id + ": -I'm attending the group " + this.group.id);
 
                 this.group.qtdTried++;
 
@@ -53,13 +53,16 @@ public class Receptionist extends Thread {
         try {
             if (this.hotel.qtdFreeRooms > 0) {
                 for (Room room : this.hotel.rooms) {
-                    if (room.group != null && room.group.members.isEmpty()) {
+                    if (room.group != null && room.group.members.isEmpty() && !room.isOcupped) {
 
+//                      Room settings
                         room.group = this.group;
-//                        this.group.groupDesirer = Desirer.ALLOCATED;
+                        room.isOcupped = true;
+
+//                      Group settings
                         this.group.room = room;
 
-                        System.out.println("Receptionist " + this.id + ", group " + this.group.id + " allocated to room " + room.roomNumber);
+                        System.out.println("Receptionist " + this.id + ": -Group " + this.group.id + " allocated to room " + room.roomNumber);
 
                         this.hotel.qtdFreeRooms -= 1;
                         break;
@@ -72,7 +75,7 @@ public class Receptionist extends Thread {
 
         if (this.hotel.qtdFreeRooms == 0 && this.group != null) {
 
-            System.out.println("Receptionist " + this.id + " no room found for group " + this.group.id + "\n");
+            System.out.println("Receptionist " + this.id + ": -No room found for group " + this.group.id );
 
             if (this.group.qtdTried == 1){
                 this.group.goOutWait();

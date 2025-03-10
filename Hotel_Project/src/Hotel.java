@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Hotel {
     public ArrayList<Group> groups;
+    public ArrayList<Group> groupsTakeARide;
     public ArrayList<Group> groupsInWaitList;
 
     public ArrayList<RoomCleaner> roomCleaners;
@@ -16,6 +17,7 @@ public class Hotel {
     public Hotel(ArrayList<Group> groups, ArrayList<RoomCleaner> roomCleaners, ArrayList<Receptionist> receptionists, ArrayList<Room> rooms) {
         this.groups = groups;
         this.groupsInWaitList = new ArrayList<>();
+        this.groupsTakeARide = new ArrayList<>();
         this.roomCleaners = roomCleaners;
         this.receptionists = receptionists;
         this.rooms = rooms;

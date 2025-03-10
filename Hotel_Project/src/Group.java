@@ -22,12 +22,25 @@ public class Group extends Thread {
         startMembers();
 
         while (runLoop) {
-//            System.out.println("rodando em");
+            groupDesirerCont();
+
             if (groupDesirer == Desirer.CHECK_IN && room == null) {
                 if (this.qtdTried == 2){
                     this.goHome();
                 }
             }
+
+            if (groupDesirer == Desirer.GET_OUT) {
+                System.out.println("Group" + this.id + "We are moving to reception, we want to take a little ride");
+
+                this.hotel.lock.lock();
+                try {
+                    this.room.group = null;
+                } finally {
+                    this.hotel.lock.unlock();
+                }
+            }
+
             //just to finalize for a while
 
             else {
@@ -36,12 +49,34 @@ public class Group extends Thread {
         }
     }
 
+    private void groupDesirerCont() {
+        int getOut = 0;
+        int checkOut = 0;
+
+        for (Guest g: this.members){
+            switch (g.desirer){
+                case CHECK_OUT -> {
+                    checkOut++;
+                }
+                case GET_OUT -> {
+                    getOut++;
+                }
+            }
+        }
+
+        if (checkOut > getOut){
+            this.groupDesirer = Desirer.CHECK_OUT;
+        }else {
+            this.groupDesirer = Desirer.GET_OUT;
+        }
+    }
+
     private void finalizeGroup() {
         this.runLoop = false;
         this.room = null;
         this.groupDesirer = Desirer.FINALIZED;
 
-        System.out.println("finalizing..." + this.id + "\n");
+        System.out.println("\n" + "Group " + this.id + " Finalizing..." + "\n");
     }
 
 
@@ -56,7 +91,7 @@ public class Group extends Thread {
         runLoop = false;
         hotel.lock.lock();
 
-        System.out.println("Group " + this.id + " is going home after " + this.qtdTried + " tries.\n");
+        System.out.println("Group " + this.id + ":  -Going home after " + this.qtdTried + " tries.");
 
         try {
             hotel.groups.remove(this);
@@ -68,7 +103,7 @@ public class Group extends Thread {
     }
 
     public void goOutWait() {
-        System.out.println("Group " + this.id + " is going out, will try again later!");
+        System.out.println("Group " + this.id + ": - Going out, we will try again later!");
 
         try {
             hotel.lock.lock();
