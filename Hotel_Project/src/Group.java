@@ -37,7 +37,7 @@ public class Group extends Thread {
             else {
                 runLoop = false;
 //                this.interrupt();
-        
+                System.out.println("finalizando..." + this.id);
             }
         }
     }
