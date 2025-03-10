@@ -50,24 +50,24 @@ public class Receptionist extends Thread {
                 if (room.group != null && room.group.members.isEmpty()) {
                     room.group = this.group;
                     this.group.groupDesirer = Desirer.ALLOCATED;
+                    this.group.room = room;
 
-                    System.out.println("Receptionist " + this.id + "group " + this.group.id + " allocated to room " + room.roomNumber);
+                    System.out.println("Receptionist " + this.id + ", group " + this.group.id + " allocated to room " + room.roomNumber);
 
                     this.hotel.qtdFreeRooms -= 1;
-                    this.group = null;
-                    return;
+                    break;
                 }
             }
+
         } else {
             System.out.println("Receptionist " + this.id + " no room found for group " + this.group.id + "\n");
 
             if (this.group.qtdTried == 1){
                 this.group.goOutWait();
             }
-//            if (this.group.qtdTried == 2) {
-//                this.group.goHome();
-//            }
-            this.group = null;
+
         }
+
+        this.group = null;
     }
 }

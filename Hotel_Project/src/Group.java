@@ -9,47 +9,35 @@ public class Group extends Thread {
     public Hotel hotel;
     public boolean runLoop;
 
+    public Room room;
+
     public Group() {
         this.members = new ArrayList<>();
         this.groupDesirer = Desirer.CHECK_IN;
-        this.qtdTried = 0;
+
         this.runLoop = true;
+        this.room = null;
     }
 
     public void run() {
         while (runLoop) {
 
-            if (groupDesirer == Desirer.CHECK_IN) {
+            if (groupDesirer == Desirer.CHECK_IN && room == null) {
 
-//       /*         if (this.qtdTried > 1) {
-//                    goHome();
-//                }*/
                 if (this.qtdTried == 2){
                     this.goHome();
                 }
 
-                if (this.qtdTried <= 1){
-                    hotel.lock.lock();
-                    try {
-                        if (!this.hotel.groups.contains(this)) {
-                            this.hotel.groups.add(this);
-                        }
-                    } finally {
-                        hotel.lock.unlock();
-                    }
-                }
-
+//                if (this.qtdTried == 1 && lastQtd != qtdTried){
+//                    goOutWait();
+//                    lastQtd = qtdTried;
+//                }
             }
             //just to finalize for a while
             else {
                 runLoop = false;
 //                this.interrupt();
-            }
-
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+        
             }
         }
     }

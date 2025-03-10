@@ -7,11 +7,8 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) throws NoSuchMethodException {
 
-        ArrayList<Room> rooms = generateObject(10, Room.class);
-
-//      Threads
+        ArrayList<Room> rooms = generateObject(5, Room.class);
         ArrayList<Group> families = generateGroups(20);
-
         ArrayList<RoomCleaner> roomCleaners = generateObject(10, RoomCleaner.class);
         ArrayList<Receptionist> receptionists = generateObject(5, Receptionist.class);
 
