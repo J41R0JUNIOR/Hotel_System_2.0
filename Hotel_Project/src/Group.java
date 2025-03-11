@@ -30,16 +30,16 @@ public class Group extends Thread {
                 }
             }
 
-            if (groupDesirer == Desirer.GET_OUT) {
-                System.out.println("Group" + this.id + "We are moving to reception, we want to take a little ride");
-
-                this.hotel.lock.lock();
-                try {
-                    this.room.group = null;
-                } finally {
-                    this.hotel.lock.unlock();
-                }
-            }
+//            if (groupDesirer == Desirer.GET_OUT) {
+//                System.out.println("Group" + this.id + "We are moving to reception, we want to take a little ride");
+//
+//                this.hotel.lock.lock();
+//                try {
+//                    this.room.group = null;
+//                } finally {
+//                    this.hotel.lock.unlock();
+//                }
+//            }
 
             //just to finalize for a while
 
@@ -76,7 +76,7 @@ public class Group extends Thread {
         this.room = null;
         this.groupDesirer = Desirer.FINALIZED;
 
-        System.out.println("\n" + "Group " + this.id + " Finalizing..." + "\n");
+//        System.out.println("\n" + "Group " + this.id + " Finalizing..." + "\n");
     }
 
 
