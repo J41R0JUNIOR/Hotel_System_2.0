@@ -22,12 +22,15 @@ public class Group extends Thread {
         startMembers();
 
         while (runLoop) {
-            groupDesirerCont();
+            if (room != null) {
+                groupDesirerCont();
+            }
 
             if (groupDesirer == Desirer.CHECK_IN && room == null) {
                 if (this.qtdTried == 2){
                     this.goHome();
                 }
+//                System.out.println(groupDesirer + " rom: " + room + "group" + id + " naaaaaao");
             }
 
 //            if (groupDesirer == Desirer.GET_OUT) {
@@ -41,9 +44,9 @@ public class Group extends Thread {
 //                }
 //            }
 
-            //just to finalize for a while
 
             else {
+                System.out.println(groupDesirer + " rom: " + room + "group" + id);
                 finalizeGroup();
             }
         }
@@ -78,7 +81,6 @@ public class Group extends Thread {
 
 //        System.out.println("\n" + "Group " + this.id + " Finalizing..." + "\n");
     }
-
 
     private void startMembers(){
         for (Guest g: this.members){
