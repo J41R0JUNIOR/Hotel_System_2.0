@@ -9,12 +9,16 @@ public class Group extends Thread {
     public Hotel hotel;
     public boolean runLoop;
     public Room room;
+    public Integer roomDesignated;
+    public Integer roomKey;
 
     public Group() {
         this.members = new ArrayList<>();
         this.groupDesirer = Desirer.CHECK_IN;
         this.runLoop = true;
         this.room = null;
+        this.roomDesignated = null;
+        this.roomKey = null;
     }
 
     public void run() {
@@ -44,9 +48,12 @@ public class Group extends Thread {
 //                }
 //            }
 
+            else if (groupDesirer == Desirer.GO_OUT) {
+                goOutAndBackToRoom();
+            }
 
             else {
-                System.out.println(groupDesirer + " rom: " + room + "group" + id);
+//                System.out.println("group" + id);
                 finalizeGroup();
             }
         }
@@ -61,7 +68,7 @@ public class Group extends Thread {
                 case CHECK_OUT -> {
                     checkOut++;
                 }
-                case GET_OUT -> {
+                case GO_OUT -> {
                     getOut++;
                 }
             }
@@ -70,7 +77,7 @@ public class Group extends Thread {
         if (checkOut > getOut){
             this.groupDesirer = Desirer.CHECK_OUT;
         }else {
-            this.groupDesirer = Desirer.GET_OUT;
+            this.groupDesirer = Desirer.GO_OUT;
         }
     }
 
@@ -79,7 +86,7 @@ public class Group extends Thread {
         this.room = null;
         this.groupDesirer = Desirer.FINALIZED;
 
-//        System.out.println("\n" + "Group " + this.id + " Finalizing..." + "\n");
+        System.out.println("\n" + "Group " + this.id + " Finalizing..." + "\n");
     }
 
     private void startMembers(){
@@ -102,6 +109,40 @@ public class Group extends Thread {
         }
 
         finalizeGroup();
+    }
+
+    public void goOutAndBackToRoom() {
+        System.out.println("Group " + this.id + ": - We're going out get some fresh air in the city.");
+
+        try {
+            hotel.lock.lock();
+            this.room = null;
+            this.hotel.groupsInWaitList.add(this);
+
+        } finally {
+            hotel.lock.unlock();
+        }
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Thread interrupted while sleeping: " + e.getMessage());
+            return;
+        }
+
+        this.groupDesirer = Desirer.GET_IN;
+
+        try {
+            hotel.lock.lock();
+            hotel.groupsInWaitList.remove(this);
+            hotel.groups.add(this);
+        } finally {
+            hotel.lock.unlock();
+        }
+
+        System.out.println("Group " + this.id + ": - We're back, ready to enter the room.");
+
     }
 
     public void goOutWait() {

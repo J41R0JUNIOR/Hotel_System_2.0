@@ -37,18 +37,26 @@ public class Receptionist extends Thread {
 
                 System.out.println("\nReceptionist " + this.id + ": -I'm attending the group " + this.group.id);
 
-                this.group.qtdTried++;
+
 
             }
         } finally {
             this.hotel.lock.unlock();
         }
 
-        allocateGroup();
+        if (this.group.groupDesirer == Desirer.GET_IN) {
+
+        }else {
+            allocateGroup();
+
+        }
     }
 
     public void allocateGroup() {
+
         this.hotel.lock.lock();
+
+        this.group.qtdTried++;
 
         try {
             if (this.hotel.qtdFreeRooms > 0) {
@@ -61,6 +69,8 @@ public class Receptionist extends Thread {
 
 //                      Group settings
                         this.group.room = room;
+                        this.group.roomDesignated = room.roomNumber;
+                        this.group.roomKey = room.roomNumber;
 
                         System.out.println("Receptionist " + this.id + ": -Group " + this.group.id + " allocated to room " + room.roomNumber);
 
